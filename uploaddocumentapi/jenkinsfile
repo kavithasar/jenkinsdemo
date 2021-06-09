@@ -1,0 +1,27 @@
+#!groovy
+pipeline{
+ agent any
+ 
+  tools {
+    maven 'maven'
+  }
+ 
+ stages{
+ 
+   stage("build"){
+   
+       steps{
+          echo "start building...." 
+          bat "mvn -f ./uploaddocumentapi clean install -DskipTests"
+          bat "docker build -f uploaddocumentapi/dockerfile -t uploaddocumentapp ./uploaddocumentapi"
+          bat "docker run -p 7076:7070 -d uploaddocumentapp:latest"
+                       
+       }
+   
+   }
+ 
+ }
+ 
+ 
+ 
+}
